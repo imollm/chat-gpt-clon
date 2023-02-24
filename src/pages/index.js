@@ -1,20 +1,28 @@
+import { Auth, ThemeSupa } from '@supabase/auth-ui-react'
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { Layout } from '@/components/Layout'
 import { Chat } from '@/components/Chat'
-import { Login } from '@/components/Login'
-import { useUser } from '@/hooks/useUser'
 
-export default function Home() {
-  const isUserLoggedIn = useUser()
-
-  if (isUserLoggedIn) {
-    return (
-      <Layout>
-        <Chat />
-      </Layout>
-    )
-  }
+const Home = () => {
+  const session = useSession()
+  const supabase = useSupabaseClient()
 
   return (
-    <Login />
+    <div className='container' style={{ padding: '50px 0 100px 0' }}>
+      {!session ? (
+        <Auth
+          supabaseClient={supabase}
+          appearance={{ theme: ThemeSupa }}
+          theme='dark'
+          providers={['github']}
+        />
+      ) : (
+        <Layout>
+          <Chat session={session} />
+        </Layout>
+      )}
+    </div>
   )
 }
+
+export default Home
