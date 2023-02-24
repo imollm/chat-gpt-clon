@@ -36,7 +36,7 @@ class SupabaseClient {
 				})
 				.select()
 
-		if (error) throw new Error(error)
+		if (error) throw new Error(error.message)
 
 		return data
 	}
@@ -93,7 +93,7 @@ class SupabaseClient {
 				})
 				.select()
 
-		if (error) throw new Error(error)
+		if (error) throw new Error(error.message)
 
 		return data
 	}
