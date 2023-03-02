@@ -4,6 +4,7 @@ import { ChatIcon, EditIcon, TrashIcon } from './Icons'
 export function MiniChat({ id }) {
   const [isSelected, setIsSelected] = useState(false)
   const miniChat = useRef()
+  const buttons = useRef()
 
   useEffect(() => {
     document.querySelectorAll('.mini-chat')?.forEach(chat => {
@@ -11,11 +12,14 @@ export function MiniChat({ id }) {
             chat.classList.remove('bg-slate-400/20')
         }
 
+        chat.querySelector('div:nth-child(2)').classList.add('hidden')
+
         if (!chat.classList.contains('hover:bg-slate-400/20')) {
             chat.classList.add('hover:bg-slate-400/20')
         }
 
         miniChat.current.classList.add('bg-slate-400/20')
+        buttons.current.classList.remove('hidden')
     })
   }, [isSelected])
 
@@ -30,7 +34,7 @@ export function MiniChat({ id }) {
         <ChatIcon />
         <span>{id}</span>
       </div>
-      <div className='flex items-center gap-2'>
+      <div ref={buttons} className='flex items-center gap-2'>
         <EditIcon />
         <TrashIcon />
       </div>
