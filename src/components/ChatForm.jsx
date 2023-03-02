@@ -1,16 +1,17 @@
 import { SendIcon } from '@/components/Icons'
-import { useMessageResponse } from '@/store/messages'
+// import { useMessageResponse } from '@/store/messages'
 import { useRef } from 'react'
 
+// TODO: Manage fetching and storing of new messages
 export function ChatForm() {
-  const sendPrompt = useMessageResponse((state) => state.sendPrompt)
+  // const sendPrompt = useMessageResponse((state) => state.sendPrompt)
   const textAreaRef = useRef()
 
   const handleSubmit = (event) => {
     event.preventDefault()
 
     const { value } = textAreaRef.current
-    sendPrompt({ prompt: value })
+    // sendPrompt({ prompt: value })
     textAreaRef.current.value = ''
   }
 
