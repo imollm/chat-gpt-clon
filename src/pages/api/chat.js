@@ -1,3 +1,5 @@
+import handleError from "@/utils/errors"
+
 export default async function handler(req, res) {
     if (req.method !== 'POST')
         return res.status(405).end()
@@ -5,7 +7,7 @@ export default async function handler(req, res) {
     const { prompt } = req.body
 
     if (!prompt)
-        return res.status(400).json({ message: 'prompt is required' })
+        return res.status(400).json({ error: handleError('Prompt is required', 400) })
 
     const payload = {
         model: "text-davinci-003",
@@ -28,7 +30,7 @@ export default async function handler(req, res) {
         })
 
         if (!response.ok) {
-            return res.status(500).json({ error: 'Error while fetching OpenAI API' })
+            return res.status(500).json({ error: handleError('Error while fetching OpenAI API', 500) })
         }
 
         const json = await response.json()
@@ -36,7 +38,6 @@ export default async function handler(req, res) {
             message: json.choices[0].text
         })
     } catch(e) {
-        console.error(e)
-        return res.status(500).json({ error: e })
+        return res.status(500).json({ error: handleError(e, 500) })
     }
 }

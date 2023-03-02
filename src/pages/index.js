@@ -1,20 +1,23 @@
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { Layout } from '@/components/Layout'
 import { Chat } from '@/components/Chat'
 import { Login } from '@/components/Login'
-import { useUser } from '@/hooks/useUser'
 
-export default function Home() {
-  const isUserLoggedIn = useUser()
-
-  if (isUserLoggedIn) {
-    return (
-      <Layout>
-        <Chat />
-      </Layout>
-    )
-  }
+const Home = () => {
+  const session = useSession()
+  const supabase = useSupabaseClient()
 
   return (
-    <Login />
+    <>
+      {!session ? (
+        <Login supabase={supabase} />
+      ) : (
+        <Layout>
+          <Chat session={session} />
+        </Layout>
+      )}
+    </>
   )
 }
+
+export default Home
