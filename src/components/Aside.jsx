@@ -47,7 +47,7 @@ export function Aside() {
           {chats &&
             chats.map((chat) => {
               return (
-                <MiniChat {...chat} />
+                <MiniChat key={chat.id} {...chat} />
               )
             })}
         </ul>
