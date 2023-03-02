@@ -18,7 +18,6 @@ export default async function handler(req, res) {
             if (!id) return res.status(400).json({ error: handleError(MESSAGES.PARAM_ID_REQUIRED, 400) })
 
             const messageObj = req.body
-            console.log(typeof messageObj)
             const attrs = ['message', 'ai']
             const hasAttrs = attrs.every((attr) => Object.keys(messageObj).includes(attr)) 
             if (!hasAttrs) return res.status(422).json({ error: handleError(MESSAGES.BODY_MISSING, 422) })
