@@ -20,7 +20,7 @@ export function Chat({ session }) {
 
   useEffect(() => {
     getMessagesByChat()
-  }, [selectedChatId])
+  }, [selectedChatId, chats])
 
   async function getProfile() {
     try {
@@ -75,6 +75,7 @@ export function Chat({ session }) {
             .from('messages')
             .select('*')
             .eq('chat_id', selectedChatId)
+            .order('created_at')
 
           if (error && status !== 406) {
             throw error
