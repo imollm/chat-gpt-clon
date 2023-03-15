@@ -19,7 +19,7 @@ export function Chat({ session }) {
 
   useEffect(() => {
     getMessagesLastChat()
-  }, [user])
+  }, [])
 
   async function getProfile() {
     try {
