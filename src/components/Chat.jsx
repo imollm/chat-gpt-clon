@@ -102,7 +102,7 @@ export function Chat({ session, selectedChatId }) {
             return <Message key={message.id} {...message} avatar={avatar_url} />
           })}
       </main>
-      <ChatForm />
+      <ChatForm selectedChatId={selectedChatId} />
     </div>
   )
 }
