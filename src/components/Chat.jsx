@@ -97,7 +97,7 @@ export function Chat({ session }) {
 
   return (
     <div className='relative flex flex-col flex-1 h-full ml-64'>
-      <main className='flex flex-col items-center gap-3 h-[calc(100% - 150px)] overflow-y-scroll'>
+      <main className='flex flex-col items-center gap-3 mb-[150px] overflow-y-scroll'>
         {loading && (
           <div className='pt-6'>
             <Spinner />
