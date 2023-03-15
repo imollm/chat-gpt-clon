@@ -1,16 +1,18 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Message } from '@/components/Message'
 import { ChatForm } from '@/components/ChatForm'
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 import { Spinner } from './Icons'
+import { ChatContext } from '@/context/ChatProvider'
 
-export function Chat({ session, selectedChatId }) {
+export function Chat({ session }) {
   const supabase = useSupabaseClient()
   const user = useUser()
   const [loading, setLoading] = useState(true)
   const [messages, setMessages] = useState([])
   const [username, setUsername] = useState(null)
   const [avatar_url, setAvatarUrl] = useState(null)
+  const { selectedChatId, setSelectedChatId } = useContext(ChatContext)
 
 
   useEffect(() => {
@@ -63,7 +65,7 @@ export function Chat({ session, selectedChatId }) {
         }
 
         if (data) {
-          selectedChatId = data.id
+          setSelectedChatId(data.id)
         }
       }
 

@@ -1,7 +1,7 @@
 import { SendIcon } from '@/components/Icons'
 import { useRef, useState } from 'react'
 
-export function ChatForm({ selectedChatId }) {
+export function ChatForm() {
   const [isBtnDisabled, setIsBtnDisabled] = useState(true)
   const textAreaRef = useRef()
   const submitBtnRef = useRef()
@@ -30,7 +30,7 @@ export function ChatForm({ selectedChatId }) {
   const handleSubmit = (event) => {
     event.preventDefault()
     const { value } = textAreaRef.current
-    textAreaRef.current.value = ''
+      textAreaRef.current.value = ''
     console.log('Submit fired up!')
   }
 

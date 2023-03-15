@@ -3,16 +3,11 @@ import { Layout } from '@/components/Layout'
 import { Chat } from '@/components/Chat'
 import { Login } from '@/components/Login'
 import { Aside } from '@/components/Aside'
-import { useState } from 'react'
+import { ChatProvider } from '@/context/ChatProvider'
 
 const Home = () => {
   const session = useSession()
   const supabase = useSupabaseClient()
-  const [selectedChatId, setSelectedChatId] = useState()
-
-  function handleSwitchChat(chatId) {
-    setSelectedChatId(chatId)
-  }
 
   return (
     <>
@@ -20,8 +15,10 @@ const Home = () => {
         <Login supabase={supabase} />
       ) : (
         <Layout>
-          <Aside handleSwitchChat={(chatId) => handleSwitchChat(chatId)} />
-          <Chat session={session} selectedChatId={selectedChatId} />
+          <ChatProvider>
+            <Aside />
+            <Chat session={session} />
+          </ChatProvider>
         </Layout>
       )}
     </>

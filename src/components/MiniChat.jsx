@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { ChatContext } from '@/context/ChatProvider'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { ChatIcon, EditIcon, TrashIcon } from './Icons'
 
-export function MiniChat({ id, handleSwitchChat, isLastOne }) {
+export function MiniChat({ id, isLastOne }) {
+  const { setSelectedChatId } = useContext(ChatContext)
   const [isSelected, setIsSelected] = useState(false)
   const miniChat = useRef()
   const buttons = useRef()
@@ -31,7 +33,7 @@ export function MiniChat({ id, handleSwitchChat, isLastOne }) {
 
   function handleOnClick(chatId) {
     setIsSelected(!isSelected)
-    handleSwitchChat(chatId)
+    setSelectedChatId(chatId)
   }
 
   return (

@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AddChatIcon, Spinner } from './Icons'
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 import { MiniChat } from './MiniChat'
+import { ChatContext } from '@/context/ChatProvider'
 
-export function Aside({ handleSwitchChat }) {
+export function Aside() {
   const supabase = useSupabaseClient()
   const user = useUser()
-  const [chats, setChats] = useState([])
   const [loading, setLoading] = useState(true)
+  const { chats, setChats } = useContext(ChatContext)
 
   useEffect(() => {
     getAllChats()
@@ -50,7 +51,6 @@ export function Aside({ handleSwitchChat }) {
                 <MiniChat
                   key={chat.id}
                   {...chat}
-                  handleSwitchChat={(chatId) => handleSwitchChat(chatId)}
                   isLastOne={chats.at(-1).id === chat.id}
                 />
               )
