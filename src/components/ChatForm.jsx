@@ -1,15 +1,10 @@
 import { SendIcon } from '@/components/Icons'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 export function ChatForm({ selectedChatId }) {
+  const [isBtnDisabled, setIsBtnDisabled] = useState(true)
   const textAreaRef = useRef()
-
-  const handleSubmit = (event) => {
-    event.preventDefault()
-
-    const { value } = textAreaRef.current
-    textAreaRef.current.value = ''
-  }
+  const submitBtnRef = useRef()
 
   const handleInput = () => {
     const textarea = textAreaRef.current;
@@ -20,6 +15,9 @@ export function ChatForm({ selectedChatId }) {
   const handleValueChange = () => {
     // use setTimeout to ensure scrollHeight is updated correctly
     setTimeout(handleInput, 0)
+
+    setIsBtnDisabled(textAreaRef.current.value.length <= 0)
+    submitBtnRef.current.disabled = isBtnDisabled
   }
 
   const handleFormKeyDown = (event) => {
@@ -27,6 +25,13 @@ export function ChatForm({ selectedChatId }) {
       event.preventDefault()
       handleSubmit(event)
     }
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    const { value } = textAreaRef.current
+    textAreaRef.current.value = ''
+    console.log('Submit fired up!')
   }
 
   return (
@@ -45,8 +50,10 @@ export function ChatForm({ selectedChatId }) {
           className='w-full h-12 py-3 pl-6 pr-14 rounded resize-none bg-gptlightgray focus:outline-none'
         />
         <button
+          disabled
+          ref={submitBtnRef}
           type='submit'
-          className='absolute p-1 rounded-md top-3 right-3 hover:bg-gptdarkgray hover:cursor-pointer'
+          className={`absolute p-1 rounded-md top-3 right-3 ${isBtnDisabled ? 'hover:cursor-not-allowed' : 'hover:bg-gptdarkgray hover:cursor-pointer'}`}
         >
           <SendIcon />
         </button>
