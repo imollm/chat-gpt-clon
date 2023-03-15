@@ -14,10 +14,11 @@ export function ChatForm({ selectedChatId }) {
   const handleInput = () => {
     const textarea = textAreaRef.current;
     textarea.style.height = 'auto'; // reset height to auto
-    textarea.style.height = textarea.scrollHeight + 'px';
+    textarea.style.height = textarea.scrollHeight + 'px'; // set height to scrollHeight
   }
 
   const handleValueChange = () => {
+    // use setTimeout to ensure scrollHeight is updated correctly
     setTimeout(handleInput, 0)
   }
 
