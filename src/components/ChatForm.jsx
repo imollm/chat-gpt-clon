@@ -1,7 +1,12 @@
 import { SendIcon } from '@/components/Icons'
-import { useRef, useState } from 'react'
+import { ChatContext } from '@/context/ChatProvider'
+import { getHighestMessageId } from '@/utils'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useContext, useRef, useState } from 'react'
 
 export function ChatForm() {
+  const supabase = useSupabaseClient()
+  const { selectedChatId, storeMessage } = useContext(ChatContext)
   const [isBtnDisabled, setIsBtnDisabled] = useState(true)
   const textAreaRef = useRef()
   const submitBtnRef = useRef()
@@ -27,11 +32,42 @@ export function ChatForm() {
     }
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
+
     const { value } = textAreaRef.current
-      textAreaRef.current.value = ''
-    console.log('Submit fired up!')
+    textAreaRef.current.value = ''
+    
+    if (selectedChatId && value?.length > 0) {
+      const newMessage = {
+        chat_id: selectedChatId,
+        ai: false,
+        message: value
+      }
+
+      const lastId = getHighestMessageId()
+      if (lastId) {
+        newMessage.id = lastId + 1
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('messages')
+          .insert({...newMessage})
+          .select()
+          .single()
+
+        if (error) {
+          throw error
+        }
+
+        if (data) {
+          storeMessage(data)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
   }
 
   return (
