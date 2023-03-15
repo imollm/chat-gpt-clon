@@ -18,7 +18,7 @@ export function Chat({ session, selectedChatId }) {
   }, [session])
 
   useEffect(() => {
-    getMessagesByChat(selectedChatId)
+    getMessagesByChat()
   }, [selectedChatId])
 
   async function getProfile() {
@@ -47,7 +47,7 @@ export function Chat({ session, selectedChatId }) {
     }
   }
 
-  async function getMessagesByChat(selectedChatId) {
+  async function getMessagesByChat() {
     try {
       if (!selectedChatId) {
         const { data, error, status } = await supabase
