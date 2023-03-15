@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { ChatIcon, EditIcon, TrashIcon } from './Icons'
 
-export function MiniChat({ id }) {
+export function MiniChat({ id, handleSwitchChat, isLastOne }) {
   const [isSelected, setIsSelected] = useState(false)
   const miniChat = useRef()
   const buttons = useRef()
@@ -23,13 +23,24 @@ export function MiniChat({ id }) {
     })
   }, [isSelected])
 
+  useEffect(() => {
+    if (isLastOne) {
+      miniChat.current.classList.add('bg-slate-400/20')
+    }
+  }, [])
+
+  function handleOnClick(chatId) {
+    setIsSelected(!isSelected)
+    handleSwitchChat(chatId)
+  }
+
   return (
     <li
       key={id}
       ref={miniChat}
       id={id}
       className={`mini-chat flex justify-between items-center gap-3 px-3 py-3 mb-2 text-sm text-white cursor-pointer rounded-md`}
-      onClick={() => setIsSelected(!isSelected)}
+      onClick={(e) => handleOnClick(e.target.id)}
     >
       <div className='flex items-center gap-2'>
         <ChatIcon />

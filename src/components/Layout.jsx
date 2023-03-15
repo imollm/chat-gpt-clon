@@ -8,7 +8,6 @@ export function Layout({ children }) {
           <title>Chat GPT</title>
         </Head>
         <div className='relative w-full h-screen bg-gptgray'>
-          <Aside />
           {children}
         </div>
       </>

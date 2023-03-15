@@ -4,7 +4,7 @@ import { ChatForm } from '@/components/ChatForm'
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 import { Spinner } from './Icons'
 
-export function Chat({ session }) {
+export function Chat({ session, selectedChatId }) {
   const supabase = useSupabaseClient()
   const user = useUser()
   const [loading, setLoading] = useState(true)
@@ -13,13 +13,14 @@ export function Chat({ session }) {
   const [username, setUsername] = useState(null)
   const [avatar_url, setAvatarUrl] = useState(null)
 
+
   useEffect(() => {
     getProfile()
   }, [session])
 
   useEffect(() => {
-    getMessagesLastChat()
-  }, [])
+    getMessagesByChat(selectedChatId)
+  }, [selectedChatId])
 
   async function getProfile() {
     try {
@@ -47,43 +48,46 @@ export function Chat({ session }) {
     }
   }
 
-  async function getMessagesLastChat() {
+  async function getMessagesByChat(selectedChatId) {
     try {
-      let { data, error, status } = await supabase
-        .from('chats')
-        .select('id')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .single()
+      if (!selectedChatId) {
+        const { data, error, status } = await supabase
+          .from('chats')
+          .select('id')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single()
 
-      if (error && status !== 406) {
-        throw error
+        if (error && status !== 406) {
+          throw error
+        }
+
+        if (data) {
+          setLastChatId(data.id)
+        }
       }
 
-      if (data) {
-        setLastChatId(data.id)
+      if (lastChatId || (selectedChatId && lastChatId !== selectedChatId)) {
+        let { data, error, status } = await supabase
+          .from('messages')
+          .select('*')
+          .eq('chat_id', selectedChatId || lastChatId)
+          .order('created_at')
+  
+        if (error && status !== 406) {
+          throw error
+        }
+  
+        if (data) {
+          setMessages(data)
+        }
       }
     } catch (error) {
       console.error(error)
+    } finally {
+      setLoading(false)
     }
-
-    if (lastChatId) {
-      let { data, error, status } = await supabase
-        .from('messages')
-        .select('*')
-        .eq('chat_id', lastChatId)
-
-      if (error && status !== 406) {
-        throw error
-      }
-
-      if (data) {
-        setMessages(data)
-      }
-    }
-
-    setLoading(false)
   }
 
   return (

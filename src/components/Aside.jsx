@@ -3,7 +3,7 @@ import { AddChatIcon, Spinner } from './Icons'
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 import { MiniChat } from './MiniChat'
 
-export function Aside() {
+export function Aside({ handleSwitchChat }) {
   const supabase = useSupabaseClient()
   const user = useUser()
   const [chats, setChats] = useState([])
@@ -22,7 +22,7 @@ export function Aside() {
           .from('chats')
           .select('*')
           .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
+          .order('created_at')
 
         if (data) {
           setChats(data)
@@ -47,7 +47,12 @@ export function Aside() {
           {chats &&
             chats.map((chat) => {
               return (
-                <MiniChat key={chat.id} {...chat} />
+                <MiniChat
+                  key={chat.id}
+                  {...chat}
+                  handleSwitchChat={(chatId) => handleSwitchChat(chatId)}
+                  isLastOne={chats.at(-1).id === chat.id}
+                />
               )
             })}
         </ul>
