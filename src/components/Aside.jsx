@@ -31,6 +31,11 @@ export function Aside() {
 
         if (data) {
           setChats(data)
+          const chatsWithSortedMsg = data.map(chat => ({
+            ...chat,
+            messages: chat.messages.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+          }))
+          setChats(chatsWithSortedMsg)
         }
       }
     } catch (error) {
