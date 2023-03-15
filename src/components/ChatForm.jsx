@@ -12,9 +12,9 @@ export function ChatForm() {
   const submitBtnRef = useRef()
 
   const handleInput = () => {
-    const textarea = textAreaRef.current;
-    textarea.style.height = 'auto'; // reset height to auto
-    textarea.style.height = textarea.scrollHeight + 'px'; // set height to scrollHeight
+    const textarea = textAreaRef.current
+    textarea.style.height = 'auto' // reset height to auto
+    textarea.style.height = textarea.scrollHeight + 'px' // set height to scrollHeight
   }
 
   const handleValueChange = () => {
@@ -37,7 +37,7 @@ export function ChatForm() {
 
     const { value } = textAreaRef.current
     textAreaRef.current.value = ''
-    
+
     if (selectedChatId && value?.length > 0) {
       const newMessage = {
         chat_id: selectedChatId,
@@ -53,7 +53,7 @@ export function ChatForm() {
       try {
         const { data, error } = await supabase
           .from('messages')
-          .insert({...newMessage})
+          .insert({ ...newMessage })
           .select()
           .single()
 
@@ -75,7 +75,7 @@ export function ChatForm() {
       <form
         onKeyDown={handleFormKeyDown}
         onSubmit={handleSubmit}
-        className='relative max-w-3xl mx-auto'
+        className='relative max-w-3xl mx-auto flex flex-col justify-center items-center'
       >
         <textarea
           onInput={handleInput}
@@ -83,16 +83,20 @@ export function ChatForm() {
           ref={textAreaRef}
           rows={1}
           tabIndex={0}
-          className='w-full h-12 py-3 pl-6 pr-14 rounded resize-none bg-gptlightgray focus:outline-none'
+          className='h-12 py-3 pl-6 pr-14 rounded resize-none bg-gptlightgray focus:outline-none 2lg:w-full w-[85%]'
         />
         <button
-          disabled
-          ref={submitBtnRef}
-          type='submit'
-          className={`absolute p-1 rounded-md top-3 right-3 ${isBtnDisabled ? 'hover:cursor-not-allowed' : 'hover:bg-gptdarkgray hover:cursor-pointer'}`}
-        >
-          <SendIcon />
-        </button>
+            disabled
+            ref={submitBtnRef}
+            type='submit'
+            className={`absolute p-1 rounded-md top-3 2lg:right-[3%] right-[9%] ${
+              isBtnDisabled
+                ? 'hover:cursor-not-allowed'
+                : 'hover:bg-gptdarkgray hover:cursor-pointer'
+            }`}
+          >
+            <SendIcon />
+          </button>
         <div className='px-3 pt-3 pb-6 text-xs text-gptgray'>
           ChatGPT Feb 13 Version. Free Research Preview. Our goal is to make AI
           systems more natural and safe to interact with. Your feedback will
