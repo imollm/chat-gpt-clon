@@ -8,7 +8,6 @@ export function Chat({ session, selectedChatId }) {
   const supabase = useSupabaseClient()
   const user = useUser()
   const [loading, setLoading] = useState(true)
-  const [lastChatId, setLastChatId] = useState(null)
   const [messages, setMessages] = useState([])
   const [username, setUsername] = useState(null)
   const [avatar_url, setAvatarUrl] = useState(null)
@@ -64,15 +63,15 @@ export function Chat({ session, selectedChatId }) {
         }
 
         if (data) {
-          setLastChatId(data.id)
+          selectedChatId = data.id
         }
       }
 
-      if (lastChatId || (selectedChatId && lastChatId !== selectedChatId)) {
+      if (selectedChatId) {
         let { data, error, status } = await supabase
           .from('messages')
           .select('*')
-          .eq('chat_id', selectedChatId || lastChatId)
+          .eq('chat_id', selectedChatId)
           .order('created_at')
   
         if (error && status !== 406) {
