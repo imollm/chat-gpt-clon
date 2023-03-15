@@ -1,27 +1,27 @@
 import { SendIcon } from '@/components/Icons'
-// import { useMessageResponse } from '@/store/messages'
 import { useRef } from 'react'
 
-// TODO: Manage fetching and storing of new messages
-export function ChatForm() {
-  // const sendPrompt = useMessageResponse((state) => state.sendPrompt)
+export function ChatForm({ selectedChatId }) {
   const textAreaRef = useRef()
 
   const handleSubmit = (event) => {
     event.preventDefault()
 
     const { value } = textAreaRef.current
-    // sendPrompt({ prompt: value })
     textAreaRef.current.value = ''
   }
 
-  const handleChange = () => {
-    const el = textAreaRef.current
-    const scrollHeight = el.scrollHeight
-    el.style.height = scrollHeight + 'px'
+  const handleInput = () => {
+    const textarea = textAreaRef.current;
+    textarea.style.height = 'auto'; // reset height to auto
+    textarea.style.height = textarea.scrollHeight + 'px';
   }
 
-  const handleKeyDown = (event) => {
+  const handleValueChange = () => {
+    setTimeout(handleInput, 0)
+  }
+
+  const handleFormKeyDown = (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
       handleSubmit(event)
@@ -31,16 +31,17 @@ export function ChatForm() {
   return (
     <section className='absolute bottom-0 w-full'>
       <form
-        onKeyDown={handleKeyDown}
+        onKeyDown={handleFormKeyDown}
         onSubmit={handleSubmit}
         className='relative max-w-3xl mx-auto'
       >
         <textarea
-          onChange={handleChange}
+          onInput={handleInput}
+          onChange={handleValueChange}
           ref={textAreaRef}
           rows={1}
           tabIndex={0}
-          className='w-full h-12 py-3 pl-6 rounded resize-none bg-gptlightgray focus:outline-none'
+          className='w-full h-12 py-3 pl-6 pr-14 rounded resize-none bg-gptlightgray focus:outline-none'
         />
         <button
           type='submit'
