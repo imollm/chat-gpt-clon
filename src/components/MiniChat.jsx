@@ -27,6 +27,7 @@ export function MiniChat({ id }) {
     <li
       key={id}
       ref={miniChat}
+      id={id}
       className={`mini-chat flex justify-between items-center gap-3 px-3 py-3 mb-2 text-sm text-white cursor-pointer rounded-md`}
       onClick={() => setIsSelected(!isSelected)}
     >
