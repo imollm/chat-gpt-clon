@@ -21,6 +21,9 @@ module.exports = {
       },
       colors: {
         gptgray: '#8d8d8d'
+      },
+      screens: {
+        '2lg': '1110px'
       }
     },
   },
