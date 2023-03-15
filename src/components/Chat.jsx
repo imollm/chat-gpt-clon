@@ -12,8 +12,7 @@ export function Chat({ session }) {
   const [messages, setMessages] = useState([])
   const [username, setUsername] = useState(null)
   const [avatar_url, setAvatarUrl] = useState(null)
-  const { selectedChatId, setSelectedChatId } = useContext(ChatContext)
-
+  const { selectedChatId, setSelectedChatId, chats } = useContext(ChatContext)
 
   useEffect(() => {
     getProfile()
@@ -51,6 +50,7 @@ export function Chat({ session }) {
 
   async function getMessagesByChat() {
     try {
+      // When its first render and no chat id is selected
       if (!selectedChatId) {
         const { data, error, status } = await supabase
           .from('chats')
@@ -67,22 +67,25 @@ export function Chat({ session }) {
         if (data) {
           setSelectedChatId(data.id)
         }
-      }
-
+      } 
+      // When user click and switch chat on the aside
       if (selectedChatId) {
-        let { data, error, status } = await supabase
-          .from('messages')
-          .select('*')
-          .eq('chat_id', selectedChatId)
-          .order('created_at')
-  
-        if (error && status !== 406) {
-          throw error
-        }
-  
-        if (data) {
+        if (!chats) {
+          const { data, status, error } = await supabase
+            .from('messages')
+            .select('*')
+            .eq('chat_id', selectedChatId)
+
+          if (error && status !== 406) {
+            throw error
+          }
+
           setMessages(data)
+          return
         }
+
+        const chat = chats.find(c => c.id == selectedChatId)
+        setMessages(chat.messages)
       }
     } catch (error) {
       console.error(error)
@@ -104,7 +107,7 @@ export function Chat({ session }) {
             return <Message key={message.id} {...message} avatar={avatar_url} />
           })}
       </main>
-      <ChatForm selectedChatId={selectedChatId} />
+      <ChatForm />
     </div>
   )
 }

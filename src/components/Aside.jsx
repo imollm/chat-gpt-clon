@@ -19,11 +19,15 @@ export function Aside() {
       setLoading(true)
 
       if (user) {
-        let { data, error, status } = await supabase
+        const { data, error, status } = await supabase
           .from('chats')
-          .select('*')
+          .select(`*, messages (*)`)
           .eq('user_id', user.id)
           .order('created_at')
+
+        if (error && status !== 406) {
+          throw error
+        }
 
         if (data) {
           setChats(data)
