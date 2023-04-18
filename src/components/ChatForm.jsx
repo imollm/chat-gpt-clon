@@ -1,8 +1,10 @@
 import { SendIcon } from '@/components/Icons'
 import { ChatContext } from '@/context/ChatProvider'
+import { useFetch } from '@/hooks/useFetch'
 import { getHighestMessageId } from '@/utils'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useContext, useRef, useState } from 'react'
+import toast, { Toaster } from 'react-hot-toast';
 
 export function ChatForm() {
   const supabase = useSupabaseClient()
@@ -63,6 +65,13 @@ export function ChatForm() {
 
         if (data) {
           storeMessage(data)
+
+          const prompt = value
+          const response = await useFetch({ prompt })
+
+          if (response.status !== 200) {
+            toast.error(`Something went wrong!`)
+          }
         }
       } catch (error) {
         console.error(error)
@@ -103,6 +112,7 @@ export function ChatForm() {
           help us improve.
         </div>
       </form>
+      <Toaster />
     </section>
   )
 }
